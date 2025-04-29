@@ -5,7 +5,9 @@
 
 <ul>
   {% for blog in blogs %}
-  <li>{{ blog }}</li>
+  <li>
+    <a href="{% url 'learning_logs:blog' blog.id %}">{{ blog }}</a>
+  </li>
   {% empty %}
   <li>There are no blogs.</li>
   {% endfor %}
