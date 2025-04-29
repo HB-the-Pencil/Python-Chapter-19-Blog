@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Repository</title>
+</head>
+<body>
+    <div class="heading">
+        <p><a href="{% url 'blogs:index' %}">Home</a></p>
+    </div>
+    <div class="content">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+</html>
