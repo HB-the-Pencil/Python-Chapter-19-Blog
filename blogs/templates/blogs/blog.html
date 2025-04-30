@@ -12,6 +12,7 @@
         <p><strong>{{ post.title }}</strong></p>
         <p>{{ post.text }}</p>
         <p>{{ post.date_added|date:"M d, Y H:i T" }}</p>
+        <p><a href="{% url 'blogs:edit_post' post.id %}">Edit post</a></p>
     </li>
     {% empty %}
     <li>There are no posts on this blog yet.</li>
