@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Blog
+from .forms import BlogForm, BlogPostForm
+
 
 # Create your views here.
 def index(request):
@@ -20,3 +22,39 @@ def blog(request, blog_id):
     posts = blog.blogpost_set.order_by("-date_added")
     context = {"blog": blog, "posts": posts}
     return render(request, "blogs/blog.html", context)
+
+
+def new_blog(request):
+    """Create a new blog."""
+    if request.method != "POST":
+        # Create a new form if it's not being submitted.
+        form = BlogForm()
+    else:
+        # Submit data.
+        form = BlogForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("blogs:blogs")
+
+    # Display the form.
+    context = {"form": form}
+    return render(request, "blogs/new_blog.html", context)
+
+
+def new_post(request, blog_id):
+    """Create a new post for a blog."""
+    blog = Blog.objects.get(id=blog_id)
+    if request.method != "POST":
+        # Create a new form if it's not being submitted.
+        form = BlogPostForm()
+    else:
+        # Submit data.
+        form = BlogPostForm(data=request.POST)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.blog = blog
+            new_post.save()
+            return redirect("blogs:blog", blog_id=blog_id)
+
+    context = {"blog": blog, "form": form}
+    return render(request, "blogs/new_post.html", context)

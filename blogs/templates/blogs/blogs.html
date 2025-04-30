@@ -3,10 +3,12 @@
 {% block content %}
 <p>Blogs</p>
 
+<a href="{% url 'blogs:new_blog' %}">Create a New Blog</a>
+
 <ul>
   {% for blog in blogs %}
   <li>
-    <a href="{% url 'learning_logs:blog' blog.id %}">{{ blog }}</a>
+    <a href="{% url 'blogs:blog' blog.id %}">{{ blog }}</a>
   </li>
   {% empty %}
   <li>There are no blogs.</li>
