@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from .models import Blog, BlogPost
 from .forms import BlogForm, BlogPostForm
 
+
+def validate_user(blog, request):
+    if blog.author != request.user:
+        raise Http404
 
 # Create your views here.
 def index(request):
@@ -47,6 +52,9 @@ def new_blog(request):
 def new_post(request, blog_id):
     """Create a new post for a blog."""
     blog = Blog.objects.get(id=blog_id)
+
+    validate_user(blog, request)
+
     if request.method != "POST":
         # Create a new form if it's not being submitted.
         form = BlogPostForm()
@@ -68,6 +76,8 @@ def edit_post(request, post_id):
     """Edit an existing post."""
     post = BlogPost.objects.get(id=post_id)
     blog = post.blog
+
+    validate_user(blog, request)
 
     if request.method != "POST":
         # Fill the form with the existing information.
